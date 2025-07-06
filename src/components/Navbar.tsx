@@ -1,4 +1,3 @@
-import { type ReactNode } from 'react';
 
 interface NavbarProps {
   isUserDropdownOpen: boolean;
@@ -6,7 +5,7 @@ interface NavbarProps {
   closeUserDropdown: () => void;
 }
 
-const Navbar = ({ isUserDropdownOpen, toggleUserDropdown, closeUserDropdown }: NavbarProps) => {
+const Navbar = ({ isUserDropdownOpen, toggleUserDropdown }: NavbarProps) => {
   return (
     <header className="bg-white shadow-sm z-10">
       <div className="flex items-center justify-between px-6 py-3">

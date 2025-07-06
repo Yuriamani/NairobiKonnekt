@@ -249,7 +249,7 @@ const NotificationsPage = () => {
         </div>
       </main>
 
-      {/* Bottom Navigation
+      Bottom Navigation
       <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 flex justify-around items-center py-3">
         <button className="flex flex-col items-center text-blue-600">
           <FaHome className="text-xl" />
@@ -272,7 +272,7 @@ const NotificationsPage = () => {
           <FaUser className="text-xl" />
           <span className="text-xs mt-1">Profile</span>
         </button>
-      </nav> */}
+      </nav>
 
      
     </div>

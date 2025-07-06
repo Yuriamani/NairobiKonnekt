@@ -1,9 +1,5 @@
 import { useState } from 'react';
 import MobileMenu from './MobileMenu';
-import FeaturedBusinesses from './FeaturedBusinesses';
-import QuickRideOptions from './QuickRideOptions';
-import RecentActivity from './RecentActivity';
-
 const MobileLayout = ({ children }: { children: React.ReactNode }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 

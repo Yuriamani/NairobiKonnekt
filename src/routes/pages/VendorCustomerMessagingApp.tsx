@@ -32,13 +32,20 @@ interface Message {
 
 const VendorCustomerMessagingApp = () => {
   // State
-  const [conversations, setConversations] = useState<Conversation[]>([
+  const conversations: Conversation[] = [
     { id: 1, name: 'John Smith', lastMessage: 'Thanks for the quick response!', time: '10:30 AM', unread: 2, avatar: 'J', online: true },
     { id: 2, name: 'Sarah Johnson', lastMessage: 'When will my order ship?', time: 'Yesterday', unread: 0, avatar: 'S', online: false },
     { id: 3, name: 'Mike Williams', lastMessage: 'Do you have this in other colors?', time: 'Monday', unread: 1, avatar: 'M', online: true },
     { id: 4, name: 'Emily Brown', lastMessage: 'Received the package, thanks!', time: '12/05', unread: 0, avatar: 'E', online: false },
     { id: 5, name: 'David Lee', lastMessage: 'I have a question about my order', time: '11/30', unread: 0, avatar: 'D', online: false }
-  ]);
+];
+  // const [conversations, setConversations] = useState<Conversation[]>([
+  //   { id: 1, name: 'John Smith', lastMessage: 'Thanks for the quick response!', time: '10:30 AM', unread: 2, avatar: 'J', online: true },
+  //   { id: 2, name: 'Sarah Johnson', lastMessage: 'When will my order ship?', time: 'Yesterday', unread: 0, avatar: 'S', online: false },
+  //   { id: 3, name: 'Mike Williams', lastMessage: 'Do you have this in other colors?', time: 'Monday', unread: 1, avatar: 'M', online: true },
+  //   { id: 4, name: 'Emily Brown', lastMessage: 'Received the package, thanks!', time: '12/05', unread: 0, avatar: 'E', online: false },
+  //   { id: 5, name: 'David Lee', lastMessage: 'I have a question about my order', time: '11/30', unread: 0, avatar: 'D', online: false }
+  // ]);
 
   const [messages, setMessages] = useState<Message[]>([
     { id: 1, sender: 'customer', text: 'Hello, I have a question about my order', time: '10:00 AM' },

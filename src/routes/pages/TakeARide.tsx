@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaBus, FaSearch, FaTicketAlt, FaMapMarkedAlt, FaStar, FaTimes, FaUserTie, FaCheck } from 'react-icons/fa';
+import { FaSearch, FaTicketAlt, FaMapMarkedAlt, FaStar, FaTimes, FaUserTie, FaCheck } from 'react-icons/fa';
 import './takearide.css'
 const TakeARide = () => {
   const [selectedSeat, setSelectedSeat] = useState<string | null>(null);

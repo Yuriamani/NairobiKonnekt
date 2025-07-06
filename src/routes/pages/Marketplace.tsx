@@ -1,4 +1,4 @@
-import { FaSearch, FaHeart, FaShoppingCart, FaUser, FaChevronDown, FaMobileAlt, FaTshirt, FaHome, FaGamepad, FaBaby, FaBolt, FaEye, FaStar, FaStarHalfAlt, FaEllipsisH } from 'react-icons/fa';
+import { FaHeart, FaShoppingCart, FaMobileAlt, FaTshirt, FaHome, FaGamepad, FaBaby, FaBolt, FaEye, FaStar, FaStarHalfAlt, FaEllipsisH } from 'react-icons/fa';
 
 const Marketplace = () => {
   return (

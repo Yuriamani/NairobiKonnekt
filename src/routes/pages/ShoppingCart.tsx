@@ -7,7 +7,6 @@ import {
   FaTimes, 
   FaMinus, 
   FaPlus,
-  FaPaperPlane,
   FaCcVisa,
   FaCcMastercard,
   FaCcAmex,
