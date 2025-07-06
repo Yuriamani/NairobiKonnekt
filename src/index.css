@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+/* Custom transitions */
+/* .search-container {
+    transition: all 0.3s ease;
+}
+.search-container.focused {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+.suggestions-container {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
+}
+.suggestions-container.visible {
+    max-height: 300px;
+    opacity: 1;
+}
+.suggestion-item:hover, .suggestion-item.selected {
+    background-color: #f3f4f6;
+}
+.search-icon {
+    transition: transform 0.3s ease;
+}
+.search-container.focused .search-icon {
+    transform: scale(1.1);
+} */
+
+/* Custom CSS for transitions and animations */
+.slide-in {
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+.slide-out {
+    animation: slideOut 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+.mobile-menu {
+    transition: all 0.3s ease;
+}
+
+.mobile-menu.hidden {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+.mobile-menu.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

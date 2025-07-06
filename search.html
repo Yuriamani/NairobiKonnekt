@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Search with Suggestions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .search-container {
+            transition: all 0.3s ease;
+        }
+        .search-container.focused {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .suggestions-container {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.2s ease;
+        }
+        .suggestions-container.visible {
+            max-height: 300px;
+            opacity: 1;
+        }
+        .suggestion-item:hover, .suggestion-item.selected {
+            background-color: #f3f4f6;
+        }
+        .search-icon {
+            transition: transform 0.3s ease;
+        }
+        .search-container.focused .search-icon {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl mx-auto">
+        <div class="search-container bg-white rounded-full p-1 shadow-md relative transition-all duration-300">
+            <div class="flex items-center">
+                <div class="pl-4 pr-2">
+                    <i class="search-icon fas fa-search text-gray-400"></i>
+                </div>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Search for products..." 
+                    class="w-full py-3 px-2 outline-none rounded-full text-gray-700 placeholder-gray-400"
+                    autocomplete="off"
+                >
+                <button id="searchButton" class="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-6 py-2 ml-2 transition-colors duration-300">
+                    Search
+                </button>
+            </div>
+            <div id="suggestionsContainer" class="suggestions-container absolute left-0 right-0 mt-1 bg-white rounded-lg shadow-lg z-10 overflow-y-auto">
+                <div id="suggestionsList" class="py-2"></div>
+            </div>
+        </div>
+        
+        <div id="searchResults" class="mt-8 hidden">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Search Results</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="resultsGrid">
+                <!-- Results will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            const suggestionsContainer = document.getElementById('suggestionsContainer');
+            const suggestionsList = document.getElementById('suggestionsList');
+            const searchContainer = document.querySelector('.search-container');
+            const searchResults = document.getElementById('searchResults');
+            const resultsGrid = document.getElementById('resultsGrid');
+            
+            // Sample product database (in a real app, this would come from an API)
+            const products = [
+                { id: 1, name: "Wireless Bluetooth Headphones", category: "Electronics", price: 79.99 },
+                { id: 2, name: "Smartphone 128GB", category: "Electronics", price: 699.99 },
+                { id: 3, name: "Laptop 15.6\" 8GB RAM", category: "Electronics", price: 899.99 },
+                { id: 4, name: "Running Shoes", category: "Sports", price: 59.99 },
+                { id: 5, name: "Coffee Maker", category: "Home", price: 49.99 },
+                { id: 6, name: "Backpack", category: "Accessories", price: 39.99 },
+                { id: 7, name: "Smart Watch", category: "Electronics", price: 199.99 },
+                { id: 8, name: "Desk Lamp", category: "Home", price: 29.99 },
+                { id: 9, name: "Yoga Mat", category: "Sports", price: 24.99 },
+                { id: 10, name: "Wireless Mouse", category: "Electronics", price: 19.99 },
+            ];
+            
+            let selectedSuggestionIndex = -1;
+            
+            // Focus and blur events for the search container
+            searchInput.addEventListener('focus', function() {
+                searchContainer.classList.add('focused');
+                if (searchInput.value.length > 0) {
+                    showSuggestions(searchInput.value);
+                }
+            });
+            
+            searchInput.addEventListener('blur', function() {
+                setTimeout(() => {
+                    searchContainer.classList.remove('focused');
+                    hideSuggestions();
+                }, 200);
+            });
+            
+            // Input event for search suggestions
+            searchInput.addEventListener('input', function() {
+                if (searchInput.value.length > 0) {
+                    showSuggestions(searchInput.value);
+                } else {
+                    hideSuggestions();
+                }
+            });
+            
+            // Keyboard navigation for suggestions
+            searchInput.addEventListener('keydown', function(e) {
+                const suggestions = document.querySelectorAll('.suggestion-item');
+                
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    selectedSuggestionIndex = Math.min(selectedSuggestionIndex + 1, suggestions.length - 1);
+                    updateSelectedSuggestion();
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    selectedSuggestionIndex = Math.max(selectedSuggestionIndex - 1, -1);
+                    updateSelectedSuggestion();
+                } else if (e.key === 'Enter' && selectedSuggestionIndex >= 0) {
+                    e.preventDefault();
+                    searchInput.value = suggestions[selectedSuggestionIndex].textContent;
+                    hideSuggestions();
+                    performSearch(searchInput.value);
+                } else if (e.key === 'Enter') {
+                    performSearch(searchInput.value);
+                }
+            });
+            
+            // Search button click event
+            searchButton.addEventListener('click', function() {
+                performSearch(searchInput.value);
+            });
+            
+            // Show search suggestions
+            function showSuggestions(query) {
+                const filteredProducts = products.filter(product => 
+                    product.name.toLowerCase().includes(query.toLowerCase())
+                );
+                
+                if (filteredProducts.length > 0) {
+                    suggestionsList.innerHTML = '';
+                    
+                    filteredProducts.forEach((product, index) => {
+                        const suggestionItem = document.createElement('div');
+                        suggestionItem.className = 'suggestion-item px-4 py-3 cursor-pointer flex items-center justify-between';
+                        suggestionItem.innerHTML = `
+                            <span>${highlightMatch(product.name, query)}</span>
+                            <span class="text-xs text-gray-500">${product.category}</span>
+                        `;
+                        
+                        suggestionItem.addEventListener('mousedown', function() {
+                            searchInput.value = product.name;
+                            hideSuggestions();
+                            performSearch(product.name);
+                        });
+                        
+                        suggestionsList.appendChild(suggestionItem);
+                    });
+                    
+                    suggestionsContainer.classList.add('visible');
+                } else {
+                    suggestionsList.innerHTML = '<div class="px-4 py-3 text-gray-500">No products found</div>';
+                    suggestionsContainer.classList.add('visible');
+                }
+            }
+            
+            // Highlight matching text in suggestions
+            function highlightMatch(text, query) {
+                const regex = new RegExp(query, 'gi');
+                return text.replace(regex, match => `<span class="font-semibold text-blue-500">${match}</span>`);
+            }
+            
+            // Hide suggestions
+            function hideSuggestions() {
+                suggestionsContainer.classList.remove('visible');
+                selectedSuggestionIndex = -1;
+            }
+            
+            // Update selected suggestion with keyboard
+            function updateSelectedSuggestion() {
+                const suggestions = document.querySelectorAll('.suggestion-item');
+                
+                suggestions.forEach((suggestion, index) => {
+                    if (index === selectedSuggestionIndex) {
+                        suggestion.classList.add('selected');
+                    } else {
+                        suggestion.classList.remove('selected');
+                    }
+                });
+                
+                // Scroll into view if needed
+                if (selectedSuggestionIndex >= 0) {
+                    suggestions[selectedSuggestionIndex].scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }
+            }
+            
+            // Perform the actual search
+            function performSearch(query) {
+                if (query.trim() === '') return;
+                
+                const filteredProducts = products.filter(product => 
+                    product.name.toLowerCase().includes(query.toLowerCase())
+                );
+                
+                displayResults(filteredProducts);
+            }
+            
+            // Display search results
+            function displayResults(results) {
+                resultsGrid.innerHTML = '';
+                
+                if (results.length === 0) {
+                    resultsGrid.innerHTML = '<p class="text-gray-500 col-span-3 text-center py-8">No products found matching your search.</p>';
+                } else {
+                    results.forEach(product => {
+                        const productCard = document.createElement('div');
+                        productCard.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300';
+                        productCard.innerHTML = `
+                            <div class="h-48 bg-gray-200 flex items-center justify-center">
+                                <i class="fas fa-box-open text-4xl text-gray-400"></i>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-lg mb-1">${product.name}</h3>
+                                <p class="text-gray-500 text-sm mb-2">${product.category}</p>
+                                <p class="text-blue-600 font-bold">$${product.price.toFixed(2)}</p>
+                            </div>
+                        `;
+                        resultsGrid.appendChild(productCard);
+                    });
+                }
+                
+                searchResults.classList.remove('hidden');
+                
+                // Scroll to results
+                setTimeout(() => {
+                    searchResults.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>
