@@ -8,10 +8,7 @@ import {
   FaMapMarkerAlt, 
   FaCheckCircle, 
   FaCalendarCheck,
-  FaBellSlash,
-  FaHome,
-  FaShoppingCart,
-  FaUser
+  FaBellSlash
 } from 'react-icons/fa';
 
 interface Notification {
@@ -248,32 +245,7 @@ const NotificationsPage = () => {
           </div>
         </div>
       </main>
-
-      Bottom Navigation
-      <nav className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 flex justify-around items-center py-3">
-        <button className="flex flex-col items-center text-blue-600">
-          <FaHome className="text-xl" />
-          <span className="text-xs mt-1">Home</span>
-        </button>
-        <button className="flex flex-col items-center text-gray-500">
-          <FaShoppingCart className="text-xl" />
-          <span className="text-xs mt-1">Cart</span>
-        </button>
-        <button className="flex flex-col items-center text-gray-500 relative">
-          <FaBell className="text-xl" />
-          {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
-              {unreadCount}
-            </span>
-          )}
-          <span className="text-xs mt-1">Notifications</span>
-        </button>
-        <button className="flex flex-col items-center text-gray-500">
-          <FaUser className="text-xl" />
-          <span className="text-xs mt-1">Profile</span>
-        </button>
-      </nav>
-
+{unreadCount}
      
     </div>
   );

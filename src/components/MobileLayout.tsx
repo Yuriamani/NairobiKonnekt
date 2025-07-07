@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import MobileMenu from './MobileMenu';
+import { Link } from 'react-router-dom';
+import { FaBell } from 'react-icons/fa';
+
 const MobileLayout = ({ children }: { children: React.ReactNode }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const unreadCount = 6;
 
   return (
     <div className="md:hidden flex flex-col h-screen">
@@ -43,26 +47,31 @@ const MobileLayout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Mobile Bottom Navigation */}
       <footer className="bg-white border-t border-gray-200 py-2 px-4 flex justify-around items-center">
-        <button className="p-2 text-gray-600 hover:text-indigo-600 flex flex-col items-center">
+        <Link to="/" className="p-2 text-gray-600 hover:text-indigo-600 flex flex-col items-center">
           <i className="fas fa-home text-lg"></i>
           <span className="text-xs mt-1">Home</span>
-        </button>
-        <button className="p-2 text-gray-600 hover:text-indigo-600 flex flex-col items-center">
-          <i className="fas fa-bell text-lg"></i>
+        </Link>
+        <Link to="/notifications" className="p-2 text-gray-600 hover:text-indigo-600 flex flex-col items-center">
+          <FaBell className="text-xl" />
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
+                        {unreadCount}
+                      </span>
+                    )}
           <span className="text-xs mt-1">Alerts</span>
-        </button>
-        <button className="p-2 text-gray-600 hover:text-indigo-600 flex flex-col items-center">
+        </Link>
+        <Link to="/message" className="p-2 text-gray-600 hover:text-indigo-600 flex flex-col items-center">
           <i className="fas fa-envelope text-lg"></i>
           <span className="text-xs mt-1">Messages</span>
-        </button>
-        <button className="p-2 text-gray-600 hover:text-indigo-600 flex flex-col items-center">
+        </Link>
+        <Link to="/cart" className="p-2 text-gray-600 hover:text-indigo-600 flex flex-col items-center">
           <i className="fas fa-shopping-cart text-lg"></i>
           <span className="text-xs mt-1">Cart</span>
-        </button>
-        <button className="p-2 text-gray-600 hover:text-indigo-600 flex flex-col items-center">
+        </Link>
+        <Link to="/setting" className="p-2 text-gray-600 hover:text-indigo-600 flex flex-col items-center">
           <div className="h-6 w-6 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xs font-semibold">JK</div>
           <span className="text-xs mt-1">Account</span>
-        </button>
+        </Link>
       </footer>
     </div>
   );

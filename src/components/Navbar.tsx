@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 
 interface NavbarProps {
   isUserDropdownOpen: boolean;
@@ -20,18 +21,18 @@ const Navbar = ({ isUserDropdownOpen, toggleUserDropdown }: NavbarProps) => {
           </div>
         </div>
         <div className="flex items-center space-x-4 ml-6">
-          <button className="relative p-2 text-gray-600 hover:text-indigo-600">
+          <Link to="/notifications" className="relative p-2 text-gray-600 hover:text-indigo-600">
             <i className="fas fa-bell text-xl"></i>
             <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
-          </button>
-          <button className="relative p-2 text-gray-600 hover:text-indigo-600">
+          </Link>
+          <Link to="/message" className="relative p-2 text-gray-600 hover:text-indigo-600">
             <i className="fas fa-envelope text-xl"></i>
             <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
-          </button>
-          <button className="relative p-2 text-gray-600 hover:text-indigo-600">
+          </Link>
+          <Link to="/cart" className="relative p-2 text-gray-600 hover:text-indigo-600">
             <i className="fas fa-shopping-cart text-xl"></i>
             <span className="absolute top-0 right-0 h-4 w-4 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center">3</span>
-          </button>
+          </Link>
           <div className="relative">
             <button 
               onClick={toggleUserDropdown}
